@@ -69,31 +69,24 @@ void Experiment2D22::readCSV()
 	output << value << "\n";
 	vector<string> names;
 	split(value,',',names);
-	//size_t pos = 0;
-	//string token;
-	//while (pos = value.find(delimiter) != string::npos) {
-		//token = value.substr(0, pos);
-		//output << token << "\n";
-		//names.push_back(token);
-		//value.erase(0, pos + 1);
-	//}
-
+	
 	for (int i = 0;i < names.size();i++) {
 		output << " " << names[i] << " ";
 	}
 	output << "\n";
 	while (csvReadFile.good()) {
 		output << "File can be read" << "\n";
-		vector<float> temp;
 		getline(csvReadFile, value, '\n');
-		size_t pos = 0;
-		string token;
-		while (pos = value.find(delimiter) != string::npos) {
-			token = value.substr(0, pos);
-			double t = atof(token.c_str());
-			temp.push_back(t);
-			value.erase(0, pos + 1);
+		vector<float> temp;
+		vector<string> tempVal;
+		split(value, ',', tempVal);
+		for (int i = 0;i < tempVal.size();i++) {
+			temp.push_back(atof(tempVal[i].c_str()));
 		}
+		for (int i = 0;i < temp.size();i++) {
+			output << " " << temp[i] << " ";
+		}
+		output << "\n";
 		pData.push_back(temp);
 	}
 
