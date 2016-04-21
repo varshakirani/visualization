@@ -19,6 +19,7 @@ IMPLEMENT_GEOX_CLASS(Experiment2D22, 0)
 		ADD_STRING_PROP(CSVFileName, 0)
 
 		ADD_NOARGS_METHOD(Experiment2D22::readCSV)
+		ADD_NOARGS_METHOD(Experiment2D22::parallelPlot)
 		//ADD_INT32_PROP(numberA, 0)               
 		//ADD_FLOAT32_PROP(numberB, 0)
 	//ADD_NOARGS_METHOD(ExampleExperiment2DGraphics::drawSquares)
@@ -58,7 +59,7 @@ void Experiment2D22::readCSV()
 {
 	ifstream csvReadFile;
 	csvReadFile.open(CSVFileName);
-	vector<vector<float>> pData;
+	vector<vector<float>> tData;
 	
 	string delimiter = ",";
 	string value;
@@ -67,15 +68,15 @@ void Experiment2D22::readCSV()
 	}
 	getline(csvReadFile, value, '\n');
 	output << value << "\n";
-	vector<string> names;
-	split(value,',',names);
+	vector<string> tnames;
+	split(value,',',tnames);
 	
-	for (int i = 0;i < names.size();i++) {
-		output << " " << names[i] << " ";
+	for (int i = 0;i < tnames.size();i++) {
+		output << " " << tnames[i] << " ";
 	}
 	output << "\n";
 	while (csvReadFile.good()) {
-		output << "File can be read" << "\n";
+		//output << "File can be read" << "\n";
 		getline(csvReadFile, value, '\n');
 		vector<float> temp;
 		vector<string> tempVal;
@@ -87,8 +88,26 @@ void Experiment2D22::readCSV()
 			output << " " << temp[i] << " ";
 		}
 		output << "\n";
-		pData.push_back(temp);
+		tData.push_back(temp);
 	}
 
-	
+	pData = tData;
+	names = tnames;
+}
+
+void Experiment2D22::parallelPlot() {
+
+	viewer->clear();
+	for (int i = 0;i < names.size();i++) {
+
+		Line parallelAxis;
+		
+		parallelAxis.vertices[0] = viewer->addPoint(makeVector2f(i*5, 0));
+		parallelAxis.vertices[1] = viewer->addPoint(makeVector2f(i*5, 10));
+		
+		viewer->addLine(parallelAxis);
+
+	}
+
+	viewer->refresh();
 }
