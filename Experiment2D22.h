@@ -21,6 +21,7 @@ public:
 	//void drawaxis();
 	//void Problem2_1a();
 	void readCSV();
+	void split(const string& s, char c,	vector<string>& v);
 	virtual QWidget* createViewer();
 
 	//Attributes

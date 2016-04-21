@@ -26,6 +26,20 @@ IMPLEMENT_GEOX_CLASS(Experiment2D22, 0)
 	//ADD_NOARGS_METHOD(Experiment2D::scatterPlot)
 }
 
+void Experiment2D22::split(const string& s, char c,	vector<string>& v) {
+	string::size_type i = 0;
+	string::size_type j = s.find(c);
+
+	while (j != string::npos) {
+		v.push_back(s.substr(i, j - i));
+		i = ++j;
+		j = s.find(c, j);
+
+		if (j == string::npos)
+			v.push_back(s.substr(i, s.length()));
+	}
+}
+
 QWidget* Experiment2D22::createViewer()
 {
 	viewer = new GLGeometryViewer();
@@ -45,6 +59,7 @@ void Experiment2D22::readCSV()
 	ifstream csvReadFile;
 	csvReadFile.open(CSVFileName);
 	vector<vector<float>> pData;
+	
 	string delimiter = ",";
 	string value;
 	if (!csvReadFile.good()) {
@@ -53,13 +68,15 @@ void Experiment2D22::readCSV()
 	getline(csvReadFile, value, '\n');
 	output << value << "\n";
 	vector<string> names;
-	size_t pos = 0;
-	string token;
-	while (pos = value.find(delimiter) != string::npos) {
-		token = value.substr(0, pos);
-		names.push_back(token);
-		value.erase(0, pos + 1);
-	}
+	split(value,',',names);
+	//size_t pos = 0;
+	//string token;
+	//while (pos = value.find(delimiter) != string::npos) {
+		//token = value.substr(0, pos);
+		//output << token << "\n";
+		//names.push_back(token);
+		//value.erase(0, pos + 1);
+	//}
 
 	for (int i = 0;i < names.size();i++) {
 		output << " " << names[i] << " ";
