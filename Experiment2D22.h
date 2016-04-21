@@ -23,6 +23,9 @@ public:
 	void readCSV();
 	void split(const string& s, char c,	vector<string>& v);
 	void parallelPlot();
+	void drawaxis();
+	void scaling();
+	void drawPlot();
 	virtual QWidget* createViewer();
 
 	//Attributes
@@ -32,6 +35,7 @@ protected:
 private:
 	string CSVFileName;
 	vector<vector<float>> pData;
+	vector<vector<float>> scaledData;
 	vector<string> names;
 };
 #endif

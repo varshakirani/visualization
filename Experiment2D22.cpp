@@ -95,19 +95,76 @@ void Experiment2D22::readCSV()
 	names = tnames;
 }
 
-void Experiment2D22::parallelPlot() {
-
-	viewer->clear();
+void Experiment2D22::drawaxis() {
 	for (int i = 0;i < names.size();i++) {
 
 		Line parallelAxis;
-		
-		parallelAxis.vertices[0] = viewer->addPoint(makeVector2f(i*5, 0));
-		parallelAxis.vertices[1] = viewer->addPoint(makeVector2f(i*5, 10));
-		
-		viewer->addLine(parallelAxis);
 
+		parallelAxis.vertices[0] = viewer->addPoint(makeVector2f(i * 3, 0));
+		parallelAxis.vertices[1] = viewer->addPoint(makeVector2f(i * 3, 5));
+
+		viewer->addLine(makeVector2f(i * 3, 0), makeVector2f(i * 3, 5),makeVector4f(0.5, 0.5, 0.5, 0.5),5);
+	
 	}
 
+}
+
+void Experiment2D22::scaling() {
+	//scaling the [min,max] to the range [a,b]
+	//f(x) = (b-a)(x-min)
+//	         ------------ + a
+//  			max - min
+
+	int rows = pData.size();
+	int cols = pData[0].size();
+
+	vector<float> minVal(cols,INT_MAX);
+	vector<float> maxVal(cols,INT_MIN );
+	
+	float a, b;
+	a = 0;
+	b = 5;
+
+	for (int i = 0;i < rows;i++) {
+		for (int j = 0;j < cols;j++) {
+			if (pData[i][j] > maxVal[j])
+			{
+				maxVal[j] = pData[i][j];
+			}
+			if (pData[i][j] < minVal[j])
+			{
+				minVal[j] = pData[i][j];
+			}
+		}
+	}
+
+	
+	for (int i = 0;i < rows;i++) {
+		vector<float> temp;
+		for (int j = 0;j < cols;j++) {
+			float t;
+				t = ((b - a) * (pData[i][j] - minVal[j]) / (maxVal[j] - minVal[j])) + a;
+			temp.push_back(t);
+		}
+		scaledData.push_back(temp);
+	}
+}
+void Experiment2D22::drawPlot() {
+	int rows = scaledData.size();
+	int cols = scaledData[0].size();
+
+	for (int i = 0;i < rows;i++)
+	{
+		for (int j = 0;j < cols-1;j++) {
+			viewer->addLine(makeVector2f(j*3,scaledData[i][j]),makeVector2f((j+1)*3,scaledData[i][j+1]), makeVector4f(1, 0, 0, 0.5));
+		}
+	}
+}
+void Experiment2D22::parallelPlot() {
+
+	viewer->clear();
+	drawaxis();
+	scaling();
+	drawPlot();
 	viewer->refresh();
 }
