@@ -16,33 +16,32 @@
 ///
 class ExperimentMarchingSquares : public Experiment
 {
-    GEOX_CLASS(ExperimentMarchingSquares)
+	GEOX_CLASS(ExperimentMarchingSquares)
 
-//Constructor / Destructor
+		//Constructor / Destructor
 public:
-    ExperimentMarchingSquares();
-    virtual ~ExperimentMarchingSquares();
+	ExperimentMarchingSquares();
+	virtual ~ExperimentMarchingSquares();
 
-//Methods
+	//Methods
 public:
-    //void drawSquares();
-    void LoadCSVData();
-    void getParallelCoords(float, float);
-    virtual QWidget* createViewer();
-    //void drawCircles();
-
-//Attributes
+	void LoadCSVData();
+	virtual QWidget* createViewer();
+	void midPointDecider();
+	void findBoxes();
+	//Attributes
 protected:
-    GLGeometryViewer* viewer;
-    //int circles;
-    //int grids;
-    
+	GLGeometryViewer* viewer;
+	//int circles;
+	//int grids;
+	
+
 private:
-    
-    string FileName;
-    float isovalue = 0;
-    bool MarchingDecider = 0;
-    
+
+	string FileName;
+	float isovalue = 0;
+	bool MarchingDecider = 0;
+	
 };
 
 #endif
